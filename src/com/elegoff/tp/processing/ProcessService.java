@@ -1,7 +1,7 @@
 package com.elegoff.tp.processing;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import com.elegoff.tp.AbstractService;
 import com.elegoff.tp.bean.Processed;
@@ -65,8 +65,8 @@ public class ProcessService extends AbstractService
             p.setMaxRate(rate);
             p.setMinRate(rate);
             p.setCount(1);
-            Map<String, Double> volumeByCountry = new HashMap<String, Double>();
-            Map<String, Double> volumeByDay = new HashMap<String, Double>();
+            Map<String, Double> volumeByCountry = new TreeMap<String, Double>();
+            Map<String, Double> volumeByDay = new TreeMap<String, Double>();
             volumeByCountry.put(country, amountBuy);
             volumeByDay.put(day, amountBuy);
             p.setVolumeByCountry(volumeByCountry);

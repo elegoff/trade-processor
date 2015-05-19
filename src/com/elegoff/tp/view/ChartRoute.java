@@ -24,6 +24,8 @@ import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.entity.StandardEntityCollection;
 import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 
 import com.elegoff.tp.bean.Processed;
@@ -57,7 +59,7 @@ public class ChartRoute extends HttpServlet
         if (col.equalsIgnoreCase("day"))
         {
             data = p.getVolumeByDay();
-            chart = this.getChartByCountry(p.getCurrencyPair(), data);
+            chart = this.getChartByDay(p.getCurrencyPair(), data);
         }
         else
         {
@@ -95,4 +97,18 @@ public class ChartRoute extends HttpServlet
         return chart;
     }
 
+    private JFreeChart getChartByDay(String title, Map<String, Double> data)
+    {
+        final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        for (String day : data.keySet())
+        {
+            dataset.addValue(data.get(day), "Day", day);
+        }
+
+        JFreeChart chart = ChartFactory.createBarChart(title, "Time", "Total Amount", dataset,
+                PlotOrientation.VERTICAL, true, true, false);
+
+        return chart;
+
+    }
 }

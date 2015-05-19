@@ -8,16 +8,15 @@ This is a rather traditional architecture with :
 * Tomcat as a web-container 
 
 A servlet is dedicted to handling POST'd Json messages   
-For the sake of simplicity and timing constraints, the same instance is used for the rendering phase (JSP)
+For the sake of simplicity and timing constraints, the same instance is used for the rendering phase (JSP).
 In a production mode, the JSP rendering should better be done  by a separate Tomcat instance.
 
 * MongoDB as a database
 
-It allows to stores two collections Trades and Processed
-Trades collects every posted documents as is.
+It allows to stores two collections  : 'Trades' and 'Processed'
  
-Also for simplicity , The database is configured with a single node, and the mongod process runs on same machine as the Tomcat instance. 
-Better perfomance is expected if mongo is started in a separate box and configured with a cluster.
+Also for simplicity , the database is configured with a single node, and the mongod process runs on same machine as the Tomcat instance. 
+Whereas better perfomance is expected if mongo is started in a separate box and configured with a cluster.
 
 
 Framework and Tools
@@ -49,6 +48,7 @@ Consuming Json
 A servlet uses its doPost() method to read the incoming Json message
 The message is converted (Gson) into a java bean which allows sanitazing (valididating) its content
 Once the bean is validated, an executor service launch asynchronous tasks :
+
 1. inserting the Trade message into mongodb
 
 Trades are documents like
@@ -78,6 +78,7 @@ We decided to :
 - aggregate the count of messages for a given currency pair
 - store the max and min rate observed for this currency pair
 - keep the repartition of bought amounts by day and also by country
+
 Each document of the Processed collection looks like :
 
 	  > db.Processed.findOne()
@@ -100,9 +101,19 @@ Each document of the Processed collection looks like :
 
 Rendering the processed data
 ----------------------------
-A JSP page is refreshed (every 5 s) to reflect latests database updates
+A JSP page is refreshed (every 5 s) to reflect latest database updates
 It is populated after a global request on the Processed collection (ordered from biggest count to lowest count)
 (Further improvements could include some restricting criteria like a date range / results for a given currency pair ...)
-Repartitions data are rendered as png charts
+Repartitions data are rendered as png charts (JFreeChart)
+
+
+Deployment
+-----------
+Once the application is deployed, you can post compliant Json messages to 
+     http://HOSTNAME:8080/trade-processor/trade
+The result page is displayed at
+    http://HOSTNAME:8080/trade-processor/
+
+
 
 
