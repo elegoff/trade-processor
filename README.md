@@ -9,14 +9,15 @@ This is a rather traditional architecture with :
 
 A servlet is dedicted to handling POST'd Json messages   
 For the sake of simplicity and timing constraints, the same instance is used for the rendering phase (JSP).
+
 In a production mode, the JSP rendering should better be done  by a separate Tomcat instance.
 
 * MongoDB as a database
 
 It allows to stores two collections  : 'Trades' and 'Processed'
  
-Also for simplicity , the database is configured with a single node, and the mongod process runs on same machine as the Tomcat instance. 
-Whereas better perfomance is expected if mongo is started in a separate box and configured with a cluster.
+Also for simplicity , the database is configured with a single node. 
+Better perfomance should be expected if mongo is configured with a multi-node cluster.
 
 
 Framework and Tools
@@ -45,9 +46,9 @@ How it works
 
 Consuming Json
 --------------
-A servlet uses its doPost() method to read the incoming Json message
-The message is converted (Gson) into a java bean which allows sanitazing (valididating) its content
-Once the bean is validated, an executor service launch asynchronous tasks :
+A servlet uses its doPost() method to read the incoming Json message.
+
+The message is converted (Gson) into a java bean which allows sanitazing (valididating) its content. Once the bean is validated, an executor service launch the following asynchronous tasks :
 
 1. inserting the Trade message into mongodb
 
@@ -68,7 +69,7 @@ Trades are documents like
 
 2. forwarding the Trade message to the Processing task
 
-The asynchronicty of those tasks and then inherent Threadpool are meant to allow the servlet to handle more messages.
+The asynchronicty of those tasks and the Thread pooling are meant to allow the servlet to handle more messages.
 
 
 Processing a message
@@ -101,14 +102,17 @@ Each document of the Processed collection looks like :
 
 Rendering the processed data
 ----------------------------
-A JSP page is refreshed (every 5 s) to reflect latest database updates
+A JSP page is refreshed (every 30 s) to reflect latest database updates
 It is populated after a global request on the Processed collection (ordered from biggest count to lowest count)
+
+Plesae note that the page is currently displayed AFTER the 30 sec delay....
+
 (Further improvements could include some restricting criteria like a date range / results for a given currency pair ...)
 Repartitions data are rendered as png charts (JFreeChart)
 
 
 Deployment
------------
+===========
 * War file
 Pre-requisite : The env variable CATALINA_HOME must be set to point to your Tomcat binary
 Then the trade-processor.war file can be generate with ant
@@ -119,6 +123,17 @@ Once the application is deployed, you can post compliant Json messages to
 The result page is displayed at
     http://HOSTNAME:8080/trade-processor/
 
+Hosted solution
+================
+Endpoint :
+http://tomcat-kerfeles.rhcloud.com/trade-processor/trade
+
+Frontend page :
+http://tomcat-kerfeles.rhcloud.com/trade-processor
+
+
+Populate database example
+	curl -H "Content-Type: application/json" -X POST -d '{"userId": "134256", "currencyFrom": "EUR", "currencyTo": "GBP", "amountSell": 1000,"amountBuy": 747.10, "rate": 0.7471, "timePlaced" : "24-JAN-15 10:27:44", "originatingCountry" : "FR"}' http://tomcat-kerfeles.rhcloud.com/trade-processor/trade
 
 
 
