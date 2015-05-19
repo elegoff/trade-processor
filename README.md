@@ -109,6 +109,11 @@ Repartitions data are rendered as png charts (JFreeChart)
 
 Deployment
 -----------
+* War file
+Pre-requisite : The env variable CATALINA_HOME must be set to point to your Tomcat binary
+Then the trade-processor.war file can be generate with ant
+    ant package
+
 Once the application is deployed, you can post compliant Json messages to 
      http://HOSTNAME:8080/trade-processor/trade
 The result page is displayed at
