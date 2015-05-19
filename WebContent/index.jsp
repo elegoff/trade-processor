@@ -21,8 +21,8 @@
 
 <script type="text/javascript">
     var intervalId = 0;
-    //every 5 sec refresh should do
-    intervalId = setInterval(refresh, 5000);
+    //every 30 sec refresh should be enough
+    intervalId = setInterval(refresh, 30000);
 </script>
 </head>
 

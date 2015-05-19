@@ -5,7 +5,7 @@
     id="WebApp_ID" version="3.0">
     <display-name>CFWebapp</display-name>
      
-    <context-param>
+   <context-param>
         <param-name>MONGODB_HOST</param-name>
         <param-value>localhost</param-value>
     </context-param>
@@ -13,6 +13,8 @@
         <param-name>MONGODB_PORT</param-name>
         <param-value>27017</param-value>
     </context-param>
+
+    
      
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>

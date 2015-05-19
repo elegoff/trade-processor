@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 
 import com.mongodb.MongoClient;
 
+
 @WebListener
 public class MongoDBContextListener implements ServletContextListener
 {
@@ -31,11 +32,21 @@ public class MongoDBContextListener implements ServletContextListener
     @Override
     public void contextInitialized(ServletContextEvent sce)
     {
-        try
+
+try
         {
+
+	    String host = System.getenv("OPENSHIFT_MONGODB_DB_HOST");
+        String sport = System.getenv("OPENSHIFT_MONGODB_DB_PORT");
+        String db = System.getenv("OPENSHIFT_APP_NAME");
+        if(db == null)
+            db = "mydb";
+        String user = System.getenv("OPENSHIFT_MONGODB_DB_USERNAME");
+        String password = System.getenv("OPENSHIFT_MONGODB_DB_PASSWORD");
+        int port = Integer.decode(sport);
+	
             ServletContext ctx = sce.getServletContext();
-            MongoClient mongo = new MongoClient(ctx.getInitParameter("MONGODB_HOST"), Integer.parseInt(ctx
-                    .getInitParameter("MONGODB_PORT")));
+            MongoClient mongo = new MongoClient(host, port);
             LOG.info("MongoClient initialized successfully");
             sce.getServletContext().setAttribute("MONGO_CLIENT", mongo);
         }
@@ -43,6 +54,11 @@ public class MongoDBContextListener implements ServletContextListener
         {
             throw new RuntimeException("MongoClient init failed");
         }
+
+
+	
+ 	
+	    
     }
 
 }

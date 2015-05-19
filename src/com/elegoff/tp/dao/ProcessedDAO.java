@@ -11,6 +11,7 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
+import com.mongodb.DB;
 
 //DAO class for different MongoDB CRUD operations
 
@@ -21,7 +22,16 @@ public class ProcessedDAO
 
     public ProcessedDAO(MongoClient mongo)
     {
-        col = mongo.getDB("cf").getCollection("Processed");
+	String dbname = System.getenv("OPENSHIFT_APP_NAME");
+	DB db =  mongo.getDB(dbname);
+	
+	String user = System.getenv("OPENSHIFT_MONGODB_DB_USERNAME");
+        String password = System.getenv("OPENSHIFT_MONGODB_DB_PASSWORD");
+
+	if(db.authenticate(user, password.toCharArray()) == false) {
+            throw new RuntimeException("Failed to authenticate against db: "+db);
+        }
+        col = db.getCollection("Processed");
     }
 
     public Processed createProcessed(Processed p)
