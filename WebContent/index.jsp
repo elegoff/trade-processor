@@ -14,16 +14,20 @@
                 $('#result').html(data);
             }
         });
+
+	var intervalId = 0;
+    //every 30 sec refresh should be enough
+    intervalId = setInterval(refresh, 30000);
     }
+</script>
+
+<script type="text/javascript">
+    refresh();
 </script>
 
 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 
-<script type="text/javascript">
-    var intervalId = 0;
-    //every 30 sec refresh should be enough
-    intervalId = setInterval(refresh, 30000);
-</script>
+
 </head>
 
 <body>

@@ -105,8 +105,6 @@ Rendering the processed data
 A JSP page is refreshed (every 30 s) to reflect latest database updates
 It is populated after a global request on the Processed collection (ordered from biggest count to lowest count)
 
-Plesae note that the page is currently displayed AFTER the 30 sec delay....
-
 (Further improvements could include some restricting criteria like a date range / results for a given currency pair ...)
 Repartitions data are rendered as png charts (JFreeChart)
 
