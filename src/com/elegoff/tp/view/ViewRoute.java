@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
 import com.elegoff.tp.bean.Processed;
 import com.mongodb.MongoClient;
 
-@WebServlet("/display")
+@WebServlet("/displayResult")
 public class ViewRoute extends HttpServlet
 
 {
@@ -36,9 +36,10 @@ public class ViewRoute extends HttpServlet
         ViewService service = new ViewService(mongo);
         List<Processed> ps = service.run();
 
-        req.setAttribute("data", ps);
+        req.getSession().setAttribute("data", ps);
 
-        req.getRequestDispatcher("trades.jsp").forward(req, res);
+        req.getRequestDispatcher("result.jsp").forward(req, res);
+
     }
 
 }

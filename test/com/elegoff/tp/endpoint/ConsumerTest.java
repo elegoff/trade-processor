@@ -27,8 +27,8 @@ public class ConsumerTest
         Trade t = new Trade();
         t.setUserId(123456);
         t.setTimePlaced("25-JAN-15 10:27:44");
-        t.setCurrencyFrom("EUR");
-        t.setCurrencyTo("USD");
+        t.setCurrencyFrom("USD");
+        t.setCurrencyTo("CHF");
         t.setRate(0.99f);
         t.setAmountBuy(36f);
         t.setAmountSell(41f);
